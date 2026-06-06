@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a1410">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Breathing Coach">
+<meta name="format-detection" content="telephone=no">
+<title>Breathing Coach</title>
+<script>
+const ROUTINES = {
+  5: {
+    title: "Quick Pitch Reset",
+    subtitle: "5 min — short, accessible session to calm the breath and prime the lungs.",
+    phases: [
+      {
+        name: "Belly Warm-Up",
+        instruction: "Hand on stomach. Breathe low and slow into the belly, soft exhale.",
+        duration: 60,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Box Breathing",
+        instruction: "Equal counts in, hold, out, hold. Build focus and CO2 tolerance.",
+        duration: 96,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 4, label: "Hold" },
+          { action: "exhale", seconds: 4, label: "Breathe out" },
+          { action: "hold", seconds: 4, label: "Hold" },
+        ],
+      },
+      {
+        name: "Extended Exhale",
+        instruction: "Short inhale, long pursed-lip exhale. Empty the lungs fully.",
+        duration: 84,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "Cool-Down Belly",
+        instruction: "Return to slow belly breathing. Drop your shoulders.",
+        duration: 60,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+    ],
+  },
+  10: {
+    title: "Match-Day Lungs",
+    subtitle: "10 min — pre-game style flow: warm up, focus, recover, capacity work.",
+    phases: [
+      {
+        name: "Belly Warm-Up",
+        instruction: "Settle in. Slow nasal inhale, gentle exhale through the mouth.",
+        duration: 90,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Box Breathing",
+        instruction: "Equal 4-4-4-4 box. Lock focus and train CO2 tolerance.",
+        duration: 144,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 4, label: "Hold" },
+          { action: "exhale", seconds: 4, label: "Breathe out" },
+          { action: "hold", seconds: 4, label: "Hold" },
+        ],
+      },
+      {
+        name: "4-7-8 Capacity",
+        instruction: "Inhale 4, hold 7, long exhale 8. Slow the breath, stretch the lungs.",
+        duration: 114,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 7, label: "Hold" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "Sprint Recovery",
+        instruction: "Quick 3s nasal in, controlled 6s out. Mimics recovery between sprints.",
+        duration: 108,
+        pattern: [
+          { action: "inhale", seconds: 3, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Extended Exhale",
+        instruction: "Short inhale, long pursed-lip exhale. Push out stale air.",
+        duration: 84,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "Cool-Down Belly",
+        instruction: "Soft belly breathing to finish. Heart rate down.",
+        duration: 60,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+    ],
+  },
+  15: {
+    title: "Endurance Builder",
+    subtitle: "15 min — longer holds and CO2 work to push aerobic capacity.",
+    phases: [
+      {
+        name: "Belly Warm-Up",
+        instruction: "Ease in. Long, low belly breaths. No tension in chest or shoulders.",
+        duration: 90,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Box Breathing",
+        instruction: "Steady 4-4-4-4. Stay relaxed through each hold.",
+        duration: 192,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 4, label: "Hold" },
+          { action: "exhale", seconds: 4, label: "Breathe out" },
+          { action: "hold", seconds: 4, label: "Hold" },
+        ],
+      },
+      {
+        name: "4-7-8 Capacity",
+        instruction: "Inhale 4, hold 7, exhale 8. Slow the system, expand lung volume.",
+        duration: 114,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 7, label: "Hold" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "CO2 Tolerance Holds",
+        instruction: "Inhale 4, hold 8, exhale 6. Train tolerance to the urge to breathe.",
+        duration: 144,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 8, label: "Hold" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Sprint Recovery",
+        instruction: "3s in, 6s out. Practice rapid recovery between bursts.",
+        duration: 126,
+        pattern: [
+          { action: "inhale", seconds: 3, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Extended Exhale",
+        instruction: "Short inhale, long pursed-lip exhale. Fully empty the lungs.",
+        duration: 108,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "Cool-Down",
+        instruction: "Light, balanced 3-3 breathing to ease back to rest.",
+        duration: 126,
+        pattern: [
+          { action: "inhale", seconds: 3, label: "Breathe in" },
+          { action: "exhale", seconds: 3, label: "Breathe out" },
+        ],
+      },
+    ],
+  },
+  20: {
+    title: "Full Stamina Session",
+    subtitle: "20 min — deep capacity work with long holds and sprint-recovery drills.",
+    phases: [
+      {
+        name: "Belly Warm-Up",
+        instruction: "Long, slow nasal breaths into the belly. Settle the nervous system.",
+        duration: 150,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Box Breathing",
+        instruction: "4-4-4-4 box. Lock the rhythm in and stay smooth through the holds.",
+        duration: 192,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 4, label: "Hold" },
+          { action: "exhale", seconds: 4, label: "Breathe out" },
+          { action: "hold", seconds: 4, label: "Hold" },
+        ],
+      },
+      {
+        name: "4-7-8 Capacity",
+        instruction: "Inhale 4, hold 7, exhale 8. Stretch the lungs, slow the breath.",
+        duration: 228,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 7, label: "Hold" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+      {
+        name: "Long CO2 Holds",
+        instruction: "Inhale 4, hold 12, exhale 6. Heavy CO2 tolerance work — stay calm.",
+        duration: 198,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "hold", seconds: 12, label: "Hold" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Sprint Recovery",
+        instruction: "3s in, 6s out. Train the body to recover fast between efforts.",
+        duration: 180,
+        pattern: [
+          { action: "inhale", seconds: 3, label: "Breathe in" },
+          { action: "exhale", seconds: 6, label: "Breathe out" },
+        ],
+      },
+      {
+        name: "Extended Exhale Cool-Down",
+        instruction: "Short inhale, long pursed-lip exhale. Wind down, fully empty the lungs.",
+        duration: 252,
+        pattern: [
+          { action: "inhale", seconds: 4, label: "Breathe in" },
+          { action: "exhale", seconds: 8, label: "Long exhale" },
+        ],
+      },
+    ],
+  },
+};
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    background: #0a1410;
+    color: #e8f3ec;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+  button { touch-action: manipulation; }
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background:
+      radial-gradient(ellipse at 50% 0%, #11251c 0%, #0a1410 55%, #060c09 100%);
+  }
+  .screen {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    padding: max(env(safe-area-inset-top), 24px) 20px max(env(safe-area-inset-bottom), 24px);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .screen.active { display: flex; }
+
+  /* ---------- Start screen ---------- */
+  #startScreen { justify-content: center; align-items: center; text-align: center; }
+  .title {
+    font-size: clamp(34px, 9vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    background: linear-gradient(180deg, #f0fff5 0%, #b8e6c8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    font-size: clamp(15px, 4vw, 18px);
+    color: #8fb5a0;
+    margin: 0 0 48px;
+    max-width: 420px;
+    line-height: 1.5;
+  }
+  .pick-label {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6fa886;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .duration-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .duration-btn {
+    appearance: none;
+    border: 1px solid rgba(94, 213, 144, 0.25);
+    background: linear-gradient(180deg, rgba(31, 64, 47, 0.7) 0%, rgba(18, 41, 30, 0.7) 100%);
+    color: #f0fff5;
+    border-radius: 20px;
+    padding: 28px 18px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.2s ease, background 0.2s ease;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .duration-btn:hover { border-color: rgba(94, 213, 144, 0.6); }
+  .duration-btn:active { transform: scale(0.97); }
+  .duration-btn .num {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    color: #5ed590;
+    letter-spacing: -0.02em;
+  }
+  .duration-btn .unit {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8fb5a0;
+    font-weight: 600;
+  }
+
+  /* ---------- Session screen ---------- */
+  #sessionScreen { justify-content: space-between; }
+  .session-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .phase-progress {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6fa886;
+    font-weight: 600;
+  }
+  .phase-name {
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 700;
+    color: #f0fff5;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .phase-instruction {
+    font-size: 14px;
+    color: #8fb5a0;
+    margin: 0;
+    max-width: 360px;
+    line-height: 1.45;
+  }
+
+  .circle-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 280px;
+    padding: 16px 0;
+  }
+  .circle-stage {
+    position: relative;
+    width: min(78vw, 360px);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .circle-ring-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(94, 213, 144, 0.15);
+  }
+  .circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(120, 230, 165, 0.45) 0%, rgba(38, 130, 84, 0.55) 50%, rgba(18, 70, 44, 0.7) 100%);
+    box-shadow:
+      0 0 60px rgba(94, 213, 144, 0.25),
+      0 0 120px rgba(94, 213, 144, 0.12),
+      inset 0 0 40px rgba(255, 255, 255, 0.08);
+    transform: scale(0.6);
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .circle-inner {
+    transform: scale(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-label {
+    font-size: clamp(18px, 5vw, 22px);
+    font-weight: 700;
+    color: #f0fff5;
+    letter-spacing: -0.01em;
+  }
+  .step-count {
+    font-size: clamp(40px, 12vw, 56px);
+    font-weight: 800;
+    color: #5ed590;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .session-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .time-remaining {
+    font-size: clamp(28px, 7vw, 34px);
+    font-weight: 700;
+    color: #f0fff5;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .time-remaining-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6fa886;
+    font-weight: 600;
+    margin-bottom: -10px;
+  }
+  .controls {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .ctrl-btn {
+    appearance: none;
+    flex: 1;
+    border: 1px solid rgba(94, 213, 144, 0.3);
+    background: rgba(31, 64, 47, 0.5);
+    color: #f0fff5;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 56px;
+    transition: transform 0.12s ease, background 0.2s ease;
+  }
+  .ctrl-btn:active { transform: scale(0.97); }
+  .ctrl-btn.primary {
+    background: linear-gradient(180deg, #2f9c5e 0%, #1e7a45 100%);
+    border-color: rgba(94, 213, 144, 0.5);
+  }
+  .ctrl-btn.danger {
+    background: rgba(70, 25, 25, 0.5);
+    border-color: rgba(220, 100, 100, 0.35);
+    color: #ffd5d5;
+  }
+
+  /* ---------- Done screen ---------- */
+  #doneScreen { justify-content: center; align-items: center; text-align: center; }
+  .done-check {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(120, 230, 165, 0.6) 0%, rgba(38, 130, 84, 0.8) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    box-shadow: 0 0 60px rgba(94, 213, 144, 0.3);
+  }
+  .done-check svg { width: 48px; height: 48px; }
+  .done-title {
+    font-size: clamp(32px, 8vw, 42px);
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(180deg, #f0fff5 0%, #b8e6c8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .done-sub {
+    font-size: 16px;
+    color: #8fb5a0;
+    margin: 0 0 40px;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+  .done-btn {
+    appearance: none;
+    border: none;
+    background: linear-gradient(180deg, #2f9c5e 0%, #1e7a45 100%);
+    color: #f0fff5;
+    border-radius: 14px;
+    padding: 18px 40px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 56px;
+    min-width: 220px;
+    transition: transform 0.12s ease;
+  }
+  .done-btn:active { transform: scale(0.97); }
+
+  .error-banner {
+    margin: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(80, 25, 25, 0.7);
+    border: 1px solid rgba(220, 100, 100, 0.5);
+    color: #ffd5d5;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* ---------- Preview screen ---------- */
+  #previewScreen { justify-content: center; align-items: center; text-align: center; }
+  .preview-title {
+    font-size: clamp(26px, 7vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+    background: linear-gradient(180deg, #f0fff5 0%, #b8e6c8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .preview-subtitle {
+    font-size: 14px;
+    color: #8fb5a0;
+    margin: 0 0 28px;
+    max-width: 420px;
+    line-height: 1.5;
+  }
+  .phase-list {
+    list-style: none;
+    margin: 12px 0 28px;
+    padding: 0;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .phase-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(180deg, rgba(31, 64, 47, 0.5) 0%, rgba(18, 41, 30, 0.5) 100%);
+    border: 1px solid rgba(94, 213, 144, 0.18);
+    border-radius: 12px;
+    font-size: 15px;
+    text-align: left;
+  }
+  .phase-list .li-bullet {
+    color: #5ed590;
+    font-size: 22px;
+    line-height: 1;
+  }
+  .phase-list .li-name {
+    flex: 1;
+    color: #f0fff5;
+    font-weight: 500;
+  }
+  .phase-list .li-duration {
+    color: #6fa886;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+  .preview-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .back-btn {
+    background: transparent;
+    border-color: rgba(94, 213, 144, 0.2);
+    color: #8fb5a0;
+  }
+
+  /* ---------- Dual timer ---------- */
+  .dual-timer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+  }
+  .timer-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .timer-cell .time-remaining-label { margin-bottom: 0; }
+  .time-remaining.secondary {
+    font-size: clamp(22px, 5.5vw, 28px);
+    color: #5ed590;
+  }
+
+  @media (max-height: 640px) {
+    .circle-stage { width: min(60vw, 260px); }
+    .subtitle { margin-bottom: 28px; }
+    .phase-list { margin-bottom: 18px; }
+    .phase-list li { padding: 10px 14px; }
+  }
+
+  /* Small phones (iPhone SE 1st gen, etc.) */
+  @media (max-width: 360px) {
+    .duration-grid { gap: 10px; }
+    .duration-btn { padding: 22px 14px; min-height: 96px; }
+    .duration-btn .num { font-size: 36px; }
+    .dual-timer { gap: 28px; }
+    .phase-list li { font-size: 14px; padding: 12px 14px; }
+  }
+
+  /* Landscape phone — compact layout so circle + controls fit */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .screen { padding: 12px 16px max(env(safe-area-inset-bottom), 12px); }
+    #startScreen .title { font-size: 30px; margin-bottom: 4px; }
+    #startScreen .subtitle { margin-bottom: 14px; font-size: 13px; }
+    .pick-label { margin-bottom: 10px; font-size: 11px; }
+    .duration-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 560px; }
+    .duration-btn { min-height: 80px; padding: 14px 10px; }
+    .duration-btn .num { font-size: 30px; }
+    .session-header { gap: 2px; }
+    .phase-name { font-size: 18px; }
+    .phase-instruction { font-size: 12px; }
+    .circle-wrap { min-height: 0; padding: 4px 0; }
+    .circle-stage { width: min(38vh, 200px); }
+    .step-label { font-size: 14px; }
+    .step-count { font-size: 32px; }
+    .session-footer { gap: 8px; }
+    .time-remaining { font-size: 22px; }
+    .time-remaining.secondary { font-size: 18px; }
+    .ctrl-btn { padding: 10px; min-height: 44px; font-size: 14px; }
+    .dual-timer { gap: 24px; }
+    .phase-list { gap: 6px; margin-bottom: 14px; }
+    .phase-list li { padding: 8px 12px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<section id="startScreen" class="screen active">
+  <h1 class="title">Breathing Coach</h1>
+  <p class="subtitle">Train your lungs. Build your stamina. Pick a session.</p>
+  <div class="pick-label">Choose duration</div>
+  <div class="duration-grid" id="durationGrid"></div>
+</section>
+
+<section id="previewScreen" class="screen">
+  <h2 class="preview-title" id="previewTitle">--</h2>
+  <p class="preview-subtitle" id="previewSubtitle">--</p>
+  <div class="pick-label">What you'll do</div>
+  <ul class="phase-list" id="phaseList"></ul>
+  <div class="preview-actions">
+    <button class="ctrl-btn primary" id="previewStartBtn" type="button">Start session</button>
+    <button class="ctrl-btn back-btn" id="previewBackBtn" type="button">← Back</button>
+  </div>
+</section>
+
+<section id="sessionScreen" class="screen">
+  <header class="session-header">
+    <div class="phase-progress" id="phaseProgress">Phase 1 of 1</div>
+    <h2 class="phase-name" id="phaseName">--</h2>
+    <p class="phase-instruction" id="phaseInstruction">--</p>
+  </header>
+
+  <div class="circle-wrap">
+    <div class="circle-stage">
+      <div class="circle-ring-outer"></div>
+      <div class="circle" id="circle">
+        <div class="circle-inner">
+          <div class="step-label" id="stepLabel">Ready</div>
+          <div class="step-count" id="stepCount">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="session-footer">
+    <div class="dual-timer">
+      <div class="timer-cell">
+        <div class="time-remaining-label">Exercise</div>
+        <div class="time-remaining secondary" id="phaseTimeRemaining">00:00</div>
+      </div>
+      <div class="timer-cell">
+        <div class="time-remaining-label">Total</div>
+        <div class="time-remaining" id="timeRemaining">00:00</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="ctrl-btn primary" id="pauseBtn" type="button">Pause</button>
+      <button class="ctrl-btn danger" id="stopBtn" type="button">Stop</button>
+    </div>
+  </footer>
+</section>
+
+<section id="doneScreen" class="screen">
+  <div class="done-check">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0a1410" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="4 12 10 18 20 6"></polyline>
+    </svg>
+  </div>
+  <h2 class="done-title">Nice work</h2>
+  <p class="done-sub">Session complete. Your lungs just got stronger.</p>
+  <button class="done-btn" id="doneBtn" type="button">Back to start</button>
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  const startScreen = document.getElementById('startScreen');
+  const previewScreen = document.getElementById('previewScreen');
+  const sessionScreen = document.getElementById('sessionScreen');
+  const doneScreen = document.getElementById('doneScreen');
+  const durationGrid = document.getElementById('durationGrid');
+  const previewTitle = document.getElementById('previewTitle');
+  const previewSubtitle = document.getElementById('previewSubtitle');
+  const phaseList = document.getElementById('phaseList');
+  const previewStartBtn = document.getElementById('previewStartBtn');
+  const previewBackBtn = document.getElementById('previewBackBtn');
+  const phaseProgress = document.getElementById('phaseProgress');
+  const phaseName = document.getElementById('phaseName');
+  const phaseInstruction = document.getElementById('phaseInstruction');
+  const circle = document.getElementById('circle');
+  const stepLabel = document.getElementById('stepLabel');
+  const stepCount = document.getElementById('stepCount');
+  const timeRemaining = document.getElementById('timeRemaining');
+  const phaseTimeRemaining = document.getElementById('phaseTimeRemaining');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const doneBtn = document.getElementById('doneBtn');
+
+  let pendingMinutes = 0;
+  let wakeLock = null;
+
+  const MIN_SCALE = 0.55;
+  const MAX_SCALE = 1.0;
+
+  // Keep the screen on for the duration of a session.
+  async function acquireWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (_) { /* user agent may deny; not critical */ }
+  }
+  function releaseWakeLock() {
+    if (wakeLock) {
+      wakeLock.release().catch(() => {});
+      wakeLock = null;
+    }
+  }
+
+  function hapticTap() {
+    if (navigator.vibrate) { try { navigator.vibrate(15); } catch (_) {} }
+  }
+  function hapticPhase() {
+    if (navigator.vibrate) { try { navigator.vibrate([30, 50, 30]); } catch (_) {} }
+  }
+
+  function showScreen(which) {
+    [startScreen, previewScreen, sessionScreen, doneScreen].forEach(s => s.classList.remove('active'));
+    which.classList.add('active');
+  }
+
+  function showError(msg) {
+    const banner = document.createElement('div');
+    banner.className = 'error-banner';
+    banner.textContent = msg;
+    document.body.prepend(banner);
+  }
+
+  function fmtTime(totalSeconds) {
+    const s = Math.max(0, Math.ceil(totalSeconds));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  function buildDurationButtons() {
+    if (typeof ROUTINES === 'undefined' || !ROUTINES) {
+      showError('routines.js not loaded. Make sure routines.js is in the same folder.');
+      return;
+    }
+    const keys = [5, 10, 15, 20];
+    keys.forEach(min => {
+      const r = ROUTINES[min];
+      if (!r) return;
+      const btn = document.createElement('button');
+      btn.className = 'duration-btn';
+      btn.type = 'button';
+      btn.innerHTML =
+        '<span class="num">' + min + '</span>' +
+        '<span class="unit">Minutes</span>';
+      btn.addEventListener('click', () => { hapticTap(); showPreview(min); });
+      durationGrid.appendChild(btn);
+    });
+  }
+
+  function showPreview(minutes) {
+    const routine = ROUTINES[minutes];
+    if (!routine) {
+      showError('Routine for ' + minutes + ' minutes is missing.');
+      return;
+    }
+    pendingMinutes = minutes;
+    previewTitle.textContent = minutes + ' min — ' + routine.title;
+    previewSubtitle.textContent = routine.subtitle;
+    phaseList.innerHTML = '';
+    routine.phases.forEach(p => {
+      const li = document.createElement('li');
+      const bullet = document.createElement('span');
+      bullet.className = 'li-bullet';
+      bullet.textContent = '•';
+      const name = document.createElement('span');
+      name.className = 'li-name';
+      name.textContent = p.name;
+      const dur = document.createElement('span');
+      dur.className = 'li-duration';
+      dur.textContent = fmtTime(p.duration);
+      li.appendChild(bullet);
+      li.appendChild(name);
+      li.appendChild(dur);
+      phaseList.appendChild(li);
+    });
+    showScreen(previewScreen);
+  }
+
+  const session = {
+    active: false,
+    minutes: 0,
+    routine: null,
+    phases: null,
+    totalSeconds: 0,
+    cumulative: null,
+    patternCycle: null,
+    startTime: 0,
+    pausedAccumMs: 0,
+    pausedAt: 0,
+    isPaused: false,
+    rafId: 0,
+  };
+
+  function buildPhaseTables(routine) {
+    const phases = routine.phases;
+    const cumulative = new Array(phases.length + 1);
+    cumulative[0] = 0;
+    for (let i = 0; i < phases.length; i++) {
+      cumulative[i + 1] = cumulative[i] + phases[i].duration;
+    }
+    const patternCycle = phases.map(p => {
+      const offsets = new Array(p.pattern.length + 1);
+      offsets[0] = 0;
+      for (let i = 0; i < p.pattern.length; i++) {
+        offsets[i + 1] = offsets[i] + p.pattern[i].seconds;
+      }
+      return { sum: offsets[offsets.length - 1], offsets };
+    });
+    return { cumulative, patternCycle, total: cumulative[cumulative.length - 1] };
+  }
+
+  function startSession(minutes) {
+    const routine = ROUTINES[minutes];
+    if (!routine || !routine.phases || !routine.phases.length) {
+      showError('Routine for ' + minutes + ' minutes is missing or invalid.');
+      return;
+    }
+    const tables = buildPhaseTables(routine);
+    session.active = true;
+    session.minutes = minutes;
+    session.routine = routine;
+    session.phases = routine.phases;
+    session.totalSeconds = tables.total;
+    session.cumulative = tables.cumulative;
+    session.patternCycle = tables.patternCycle;
+    session.startTime = performance.now();
+    session.pausedAccumMs = 0;
+    session.pausedAt = 0;
+    session.isPaused = false;
+    pauseBtn.textContent = 'Pause';
+
+    showScreen(sessionScreen);
+    acquireWakeLock();
+    if (session.rafId) cancelAnimationFrame(session.rafId);
+    loop();
+  }
+
+  function stopSession(goDone) {
+    session.active = false;
+    if (session.rafId) {
+      cancelAnimationFrame(session.rafId);
+      session.rafId = 0;
+    }
+    releaseWakeLock();
+    if (goDone) {
+      showScreen(doneScreen);
+    } else {
+      showScreen(startScreen);
+    }
+  }
+
+  function togglePause() {
+    if (!session.active) return;
+    if (session.isPaused) {
+      session.pausedAccumMs += performance.now() - session.pausedAt;
+      session.isPaused = false;
+      session.pausedAt = 0;
+      pauseBtn.textContent = 'Pause';
+      loop();
+    } else {
+      session.isPaused = true;
+      session.pausedAt = performance.now();
+      pauseBtn.textContent = 'Resume';
+      if (session.rafId) {
+        cancelAnimationFrame(session.rafId);
+        session.rafId = 0;
+      }
+    }
+  }
+
+  function findPhaseIndex(elapsed) {
+    const c = session.cumulative;
+    let lo = 0, hi = c.length - 2;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (c[mid] <= elapsed) lo = mid;
+      else hi = mid - 1;
+    }
+    return lo;
+  }
+
+  function findStepIndex(offsets, t) {
+    let lo = 0, hi = offsets.length - 2;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (offsets[mid] <= t) lo = mid;
+      else hi = mid - 1;
+    }
+    return lo;
+  }
+
+  function easeInOut(x) {
+    return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+  }
+
+  function scaleForStep(action, stepElapsed, stepSeconds) {
+    const t = Math.max(0, Math.min(1, stepElapsed / stepSeconds));
+    if (action === 'inhale') {
+      return MIN_SCALE + (MAX_SCALE - MIN_SCALE) * easeInOut(t);
+    }
+    if (action === 'exhale') {
+      return MAX_SCALE - (MAX_SCALE - MIN_SCALE) * easeInOut(t);
+    }
+    return MAX_SCALE;
+  }
+
+  let lastPhaseIdx = -1;
+
+  function render() {
+    const now = performance.now();
+    const elapsedMs = now - session.startTime - session.pausedAccumMs;
+    const elapsed = elapsedMs / 1000;
+
+    if (elapsed >= session.totalSeconds) {
+      circle.style.transform = 'scale(' + MIN_SCALE + ')';
+      stepLabel.textContent = 'Done';
+      stepCount.textContent = '0';
+      timeRemaining.textContent = '00:00';
+      phaseTimeRemaining.textContent = '00:00';
+      stopSession(true);
+      lastPhaseIdx = -1;
+      return false;
+    }
+
+    const phaseIdx = findPhaseIndex(elapsed);
+    const phase = session.phases[phaseIdx];
+    const phaseStart = session.cumulative[phaseIdx];
+    const phaseEnd = session.cumulative[phaseIdx + 1];
+    const phaseElapsed = elapsed - phaseStart;
+    const cycle = session.patternCycle[phaseIdx];
+    const tInCycle = phaseElapsed % cycle.sum;
+    const stepIdx = findStepIndex(cycle.offsets, tInCycle);
+    const step = phase.pattern[stepIdx];
+    const stepStart = cycle.offsets[stepIdx];
+    const stepElapsed = tInCycle - stepStart;
+    const stepRemaining = step.seconds - stepElapsed;
+
+    if (phaseIdx !== lastPhaseIdx) {
+      phaseName.textContent = phase.name;
+      phaseInstruction.textContent = phase.instruction;
+      phaseProgress.textContent = 'Phase ' + (phaseIdx + 1) + ' of ' + session.phases.length;
+      if (lastPhaseIdx !== -1) hapticPhase();
+      lastPhaseIdx = phaseIdx;
+    }
+
+    stepLabel.textContent = step.label;
+    stepCount.textContent = String(Math.max(1, Math.ceil(stepRemaining)));
+    timeRemaining.textContent = fmtTime(session.totalSeconds - elapsed);
+    phaseTimeRemaining.textContent = fmtTime(phaseEnd - elapsed);
+
+    const scale = scaleForStep(step.action, stepElapsed, step.seconds);
+    circle.style.transform = 'scale(' + scale.toFixed(4) + ')';
+
+    return true;
+  }
+
+  function loop() {
+    if (!session.active || session.isPaused) return;
+    const keepGoing = render();
+    if (keepGoing && session.active && !session.isPaused) {
+      session.rafId = requestAnimationFrame(loop);
+    }
+  }
+
+  pauseBtn.addEventListener('click', () => { hapticTap(); togglePause(); });
+  stopBtn.addEventListener('click', () => {
+    hapticTap();
+    lastPhaseIdx = -1;
+    stopSession(false);
+  });
+  doneBtn.addEventListener('click', () => {
+    hapticTap();
+    lastPhaseIdx = -1;
+    showScreen(startScreen);
+  });
+  previewStartBtn.addEventListener('click', () => {
+    hapticTap();
+    if (pendingMinutes) startSession(pendingMinutes);
+  });
+  previewBackBtn.addEventListener('click', () => { hapticTap(); showScreen(startScreen); });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && session.active && !session.isPaused) {
+      togglePause();
+    } else if (!document.hidden && session.active && !session.isPaused) {
+      // Wake lock is auto-released when tab is hidden; re-acquire on return.
+      acquireWakeLock();
+    }
+  });
+
+  buildDurationButtons();
+})();
+</script>
+
+</body>
+</html>
